@@ -1,18 +1,16 @@
-package org.awstest.imagecloudserver.fileIO;
+package org.awstest.imagecloudserver.cloud;
 
-import org.awstest.imagecloudserver.dto.FileDeleteDto;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-public interface FileStore {
+public interface FileCloud {
 
     /**
      * create - FileStore
      * 파일을 AWS S3에 업로드합니다.
      * @param multipartFile MultipartFile 형식의 파일을 받아옵니다.
-     * @return 자원에 접근할 수 있는 URI를 받아옵니다.
+     * @return 자원에 접근할 수 있는 URI 를 받아옵니다.
      * @throws IOException 입출력 에러를 던질 수 있습니다.
      */
     String create(MultipartFile multipartFile) throws IOException;
@@ -24,7 +22,7 @@ public interface FileStore {
      * @return ResponseEntity를 만들어 반환합니다.
      * @throws IOException 입출력 에러를 던질 수 있습니다.
      */
-    ResponseEntity<?> read(String fileName) throws IOException;
+    byte[] read(String fileName) throws IOException;
 
     /**
      * delete - FileStore
@@ -35,9 +33,13 @@ public interface FileStore {
 
     /**
      * update - FileStore
-     * @param fileDeleteDto 파일 수정을 위해 파일 이름과 파일이 담긴 객체를 받아옵니다.
-     * @return 새롭게 수정된 자원에 접근할 수 있는 URI를 반환합니다.
-     * @throws IOException 입출력 에러를 던질 수 있습니다.
+     * AWS S3에 저장되어 있는 기존 파일을 삭제하고, 새로운 파일을 넣습니다.
+     * @param fileName 파일 이름을 받아옵니다.
+     * @param multipartFile 새롭게 저장할 파일 정보를 받아옵니다.
+     * @return 새롭게 저장한 파일의 파일 명을 반환합니다.
+     * @throws IOException
      */
-    String update(FileDeleteDto fileDeleteDto) throws IOException;
+    String update(String fileName, MultipartFile multipartFile) throws IOException;
+
+    String getExt(String fileName);
 }
